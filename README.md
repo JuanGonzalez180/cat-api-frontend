@@ -2,43 +2,43 @@
 
 Frontend Angular 20 con PrimeNG para la aplicación de catálogos de gatos. Incluye autenticación JWT, gestión de usuarios y visualización de razas de gatos.
 
-## 🚀 Tecnologías
+## Tecnologías
 
-- **Angular 20** - Framework frontend
-- **TypeScript** - Lenguaje tipado
-- **PrimeNG** - Componentes UI
-- **Aura Theme** - Tema visual
-- **Tailwind CSS** - Utilidades CSS
-- **RxJS** - Programación reactiva
-- **Karma/Jasmine** - Testing
-- **Docker** - Containerización
-- **Nginx** - Servidor web
+- Angular 20
+- TypeScript
+- PrimeNG
+- Aura Theme
+- Tailwind CSS
+- RxJS
+- Karma/Jasmine
+- Docker
+- Nginx
 
-## 📋 Requisitos
+## Requisitos
 
 - Node.js 20+
 - npm o yarn
-- Docker (para containerizar)
+- Docker (opcional)
 
-## ⚙️ Configuración
+## Configuración
 
-### 1. Instalación de Dependencias
+### Instalación de Dependencias
 
 ```bash
 npm install
 ```
 
-### 2. Configurar API Backend
+### Configurar API Backend
 
 Editar `src/environments/environment.prod.ts`:
 
 ```typescript
 export const environment = {
-  apiUrl: 'http://localhost:3000/api' // URL de tu backend
+  apiUrl: 'http://localhost:3000/api'
 };
 ```
 
-## 🏃 Ejecutar
+## Ejecución
 
 ### Desarrollo
 
@@ -46,7 +46,7 @@ export const environment = {
 npm start
 ```
 
-La aplicación estará disponible en `http://localhost:4200`
+Disponible en `http://localhost:4200`
 
 ### Build Producción
 
@@ -54,66 +54,38 @@ La aplicación estará disponible en `http://localhost:4200`
 npm run build
 ```
 
-Los archivos compilados estarán en `dist/cat-api-frontend/browser`
+Archivos compilados en `dist/cat-api-frontend/browser`
 
-## 🧪 Tests Unitarios
+## Tests
 
 Ejecutar pruebas con Karma/Jasmine:
 
 ```bash
-npm test                    # Modo watch interactivo
+npm test                    # Modo watch
 npm test -- --watch=false  # Una sola ejecución
 ```
 
-**Cobertura de tests:**
-- ✅ AuthService - 12 tests
-- ✅ auth.interceptor - 5 tests
-- ✅ LoginComponent - 11 tests
-- ✅ RegisterComponent - 11 tests
-- ✅ ProfileComponent - 7 tests
-- ✅ BreedsComponent - 14 tests
-- ✅ **Total: 58 tests PASANDO**
+## Docker
 
-## 🐳 Docker
-
-### Con Docker Compose
+### Docker Compose
 
 ```bash
-# Construir y ejecutar
-docker-compose up -d
-
-# Ver logs
-docker-compose logs -f
-
-# Detener
-docker-compose down
-
-# Reconstruir imagen
-docker-compose up -d --build
+docker-compose up -d      # Iniciar
+docker-compose down       # Detener
+docker-compose logs -f    # Ver logs
+docker-compose up -d --build  # Reconstruir
 ```
 
-El docker-compose inicia:
-- **Frontend** (puerto 80)
-- Container: `xpert-group`
-- Network: `xpert-network`
-
-### Con Docker manualmente
+### Docker Manual
 
 ```bash
-# Construir imagen
 docker build -t cat-api-frontend .
-
-# Ejecutar contenedor
-docker run -p 80:80 \
-  --name xpert-group \
-  cat-api-frontend
+docker run -p 80:80 --name xpert-group cat-api-frontend
 ```
 
-### Dockerfile
+### Build Multi-stage
 
-El Dockerfile usa multi-stage build:
-1. **Build stage**: Compila la aplicación Angular
-2. **Production stage**: Sirve con Nginx
+El Dockerfile compila la aplicación Angular y sirve con Nginx:
 
 ```dockerfile
 FROM node:20-alpine AS build
@@ -130,15 +102,7 @@ EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 ```
 
-### Nginx Configuration
-
-El `nginx.conf` está configurado para:
-- Servir SPA Angular
-- Rutas client-side
-- Gzip compression
-- Cache headers
-
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 src/
@@ -159,173 +123,67 @@ src/
 └── main.ts                   # Entry point
 ```
 
-## 🔐 Autenticación
+## Autenticación
 
-### Flow de Autenticación
+Flow:
+1. Login/Register obtiene JWT token
+2. HTTP Interceptor inyecta token en headers
+3. JWT persiste en localStorage
+4. Error 401 genera logout automático
+5. Router Guards protege rutas autenticadas
 
-1. **Login/Register** → Obtener JWT token
-2. **HTTP Interceptor** → Inyecta token en headers
-3. **JWT en localStorage** → Persistencia
-4. **401 Error** → Logout automático
-5. **Router Guards** → Proteger rutas
+Endpoints:
+```typescript
+POST /api/auth/login
+POST /api/auth/register
+```
 
-### Endpoints de Auth
+## Estilos
+
+- PrimeNG con Aura Theme
+- Tailwind CSS para utilidades
+- Responsive design
+
+## API Service
 
 ```typescript
-POST /api/auth/login       // Iniciar sesión
-POST /api/auth/register    // Registrarse
-```
-
-Response:
-```json
-{
-  "success": true,
-  "token": "eyJhbGc...",
-  "user": {
-    "_id": "123",
-    "email": "user@example.com",
-    "firstName": "John",
-    "lastName": "Doe"
-  }
-}
-```
-
-## 🎨 Temas y Estilos
-
-### PrimeNG Aura Theme
-
-Configurado en `app.config.ts`:
-
-```typescript
-providePrimeNG({
-  theme: {
-    preset: Aura
-  }
-})
-```
-
-### Tailwind CSS
-
-Utilidades para responsive design y flexbox. En `styles.scss`:
-
-```scss
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-```
-
-## 📡 Comunicación con Backend
-
-### API Service
-
-```typescript
-// src/app/core/services/cats.service.ts
 getBreeds(limit: number, page: number): Observable<BreedResponse>
 searchBreeds(query: string): Observable<BreedResponse>
 getImagesByBreedId(breedId: string): Observable<ImageResponse>
 ```
 
-### HTTP Interceptor
-
-Automáticamente agrega:
-- `Authorization: Bearer <token>` header
+HTTP Interceptor agrega:
+- Bearer token en headers
 - Manejo de errores 401
 - Logout en sesión expirada
 
-## 🚀 Deploy
-
-### Vercel / Netlify
-
-```bash
-npm run build
-# Subir carpeta dist/cat-api-frontend/browser
-```
-
-### Docker Hub
-
-```bash
-docker build -t tu-usuario/cat-api-frontend:latest .
-docker push tu-usuario/cat-api-frontend:latest
-```
-
-### Kubernetes
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: cat-api-frontend
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: cat-api-frontend
-  template:
-    metadata:
-      labels:
-        app: cat-api-frontend
-    spec:
-      containers:
-      - name: frontend
-        image: tu-usuario/cat-api-frontend:latest
-        ports:
-        - containerPort: 80
-```
-
-## 🛠️ Desarrollo
-
-### Crear componente
+## Desarrollo
 
 ```bash
 ng generate component features/my-component
-```
-
-### Crear servicio
-
-```bash
 ng generate service core/services/my-service
-```
-
-### Crear guard
-
-```bash
 ng generate guard core/guards/auth
 ```
 
-## 📊 Performance
+## Performance
 
-- Bundle size optimizado con tree-shaking
+- Tree-shaking para optimizar bundle
 - Lazy loading de rutas
 - OnPush change detection
-- Image optimization
 - Gzip compression con Nginx
 
-## 🐛 Solución de Problemas
+## Solución de Problemas
 
-### Problemas de CORS
+CORS: Verificar `apiUrl` en `environment.prod.ts`
 
-Verificar `MONGODB_URI` en backend y `apiUrl` en frontend:
+Token expirado: El interceptor detecta 401 y redirige a login
 
-```typescript
-// src/environments/environment.ts
-apiUrl: 'http://localhost:3000/api'
-```
+Nginx 404: `nginx.conf` redirige rutas a `index.html` para SPA routing
 
-### Token expirado
-
-El interceptor automáticamente:
-1. Detecta 401 Unauthorized
-2. Limpia localStorage
-3. Redirige a login
-
-### Nginx 404 en reload
-
-El `nginx.conf` redirige todas las rutas a `index.html` para SPA routing.
-
-## 📝 Licencia
+## Licencia
 
 MIT
 
-## 👤 Autor
+## Autor
 
-XpertGroup
+Juan Guillermo Gonzalez
