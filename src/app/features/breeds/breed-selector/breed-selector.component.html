@@ -1,0 +1,11 @@
+<div class="flex flex-col space-y-4">
+  <label class="block text-sm font-medium">Selecciona una Raza</label>
+  <p-select
+    [options]="breeds"
+    [ngModel]="selectedBreed"
+    (onChange)="onBreedSelect($event.value)"
+    optionLabel="name"
+    placeholder="Seleccionar Raza"
+    class="w-full"
+  ></p-select>
+</div>

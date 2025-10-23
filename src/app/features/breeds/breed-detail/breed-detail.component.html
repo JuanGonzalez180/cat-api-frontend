@@ -1,0 +1,45 @@
+@if (breed) {
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Breed Info -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-2xl font-bold mb-4">{{ breed.name }}</h2>
+      <div class="flex flex-col space-y-2 text-sm">
+        <p><strong>Temperamento:</strong> {{ breed.temperament }}</p>
+        <p><strong>Origen:</strong> {{ breed.origin }}</p>
+        <p><strong>Esperanza de Vida:</strong> {{ breed.life_span }}</p>
+        <p><strong>Adaptabilidad:</strong> {{ breed.adaptability }}/5</p>
+        <p><strong>Nivel de Afecto:</strong> {{ breed.affection_level }}/5</p>
+        <p><strong>Inteligencia:</strong> {{ breed.intelligence }}/5</p>
+        <p><strong>Energía:</strong> {{ breed.energy_level }}/5</p>
+        <p><strong>Amigable con Niños:</strong> {{ breed.child_friendly }}/5</p>
+        <p><strong>Amigable con Perros:</strong> {{ breed.dog_friendly }}/5</p>
+      </div>
+      <p class="mt-4 text-sm text-gray-600">{{ breed.description }}</p>
+    </div>
+
+    <!-- Carousel -->
+    @if (images.length > 0) {
+      <div>
+        <p-carousel
+          [value]="images"
+          [numVisible]="1"
+          [responsiveOptions]="[]"
+          containerClass="custom-carousel"
+          [showIndicators]="true"
+        >
+          <ng-template pTemplate="item" let-image>
+            <img
+              [src]="image.url"
+              [alt]="breed.name"
+              class="w-full h-96 object-cover rounded"
+            />
+          </ng-template>
+        </p-carousel>
+      </div>
+    } @else {
+      <div class="bg-white rounded-lg shadow p-6 flex items-center justify-center">
+        <p class="text-gray-500">No hay imágenes disponibles para esta raza</p>
+      </div>
+    }
+  </div>
+}

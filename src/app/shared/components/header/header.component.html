@@ -1,0 +1,19 @@
+<div class="bg-white shadow">
+  <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+    <h1 class="text-3xl font-bold">{{ title }}</h1>
+    <div class="flex items-center gap-4">
+      <p class="text-gray-600">
+        Bienvenido,
+        <a class="text-blue-600 hover:underline cursor-pointer" (click)="onProfileClick()">
+          {{ authService.currentUser()?.firstName }}
+        </a>
+      </p>
+      <p-button
+        label="Cerrar Sesión"
+        icon="pi pi-sign-out"
+        (click)="onLogout()"
+        severity="secondary"
+      ></p-button>
+    </div>
+  </div>
+</div>

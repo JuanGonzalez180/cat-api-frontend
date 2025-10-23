@@ -5,15 +5,6 @@ import { BreedsComponent } from './breeds.component';
 import { CatsService } from '../../core/services/cats.service';
 import { AuthService } from '../../core/services/auth.service';
 import { APP_ROUTES } from '../../core/constants/routes.constants';
-import { ButtonModule } from 'primeng/button';
-import { SelectModule } from 'primeng/select';
-import { CarouselModule } from 'primeng/carousel';
-import { TableModule } from 'primeng/table';
-import { InputTextModule } from 'primeng/inputtext';
-import { TabsModule } from 'primeng/tabs';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { FormsModule } from '@angular/forms';
 import { signal } from '@angular/core';
 import { Breed, CatImage } from '../../core/models/breed.model';
 
@@ -89,18 +80,7 @@ describe('BreedsComponent', () => {
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
-      imports: [
-        BreedsComponent,
-        FormsModule,
-        ButtonModule,
-        SelectModule,
-        CarouselModule,
-        TableModule,
-        InputTextModule,
-        TabsModule,
-        IconFieldModule,
-        InputIconModule,
-      ],
+      imports: [BreedsComponent],
       providers: [
         { provide: CatsService, useValue: catsServiceSpy },
         { provide: AuthService, useValue: authServiceSpy },
@@ -219,9 +199,8 @@ describe('BreedsComponent', () => {
   it('should return all breeds when search query is empty', () => {
     component.breeds.set(mockBreeds);
     component.filteredBreeds.set([]);
-    component.searchQuery.set('');
 
-    component.searchBreeds();
+    component.searchBreeds('');
 
     expect(component.filteredBreeds()).toEqual(mockBreeds);
   });
@@ -233,8 +212,7 @@ describe('BreedsComponent', () => {
       of({ success: true, data: searchResults, count: 1 })
     );
 
-    component.searchQuery.set('Persian');
-    component.searchBreeds();
+    component.searchBreeds('Persian');
 
     setTimeout(() => {
       expect(catsService.searchBreeds).toHaveBeenCalledWith('Persian');
@@ -246,9 +224,8 @@ describe('BreedsComponent', () => {
   it('should trim whitespace from search query', () => {
     component.breeds.set(mockBreeds);
     component.filteredBreeds.set([]);
-    component.searchQuery.set('   ');
 
-    component.searchBreeds();
+    component.searchBreeds('   ');
 
     expect(component.filteredBreeds()).toEqual(mockBreeds);
     expect(catsService.searchBreeds).not.toHaveBeenCalled();

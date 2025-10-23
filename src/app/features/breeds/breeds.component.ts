@@ -1,25 +1,34 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
-import { SelectModule } from 'primeng/select';
-import { CarouselModule } from 'primeng/carousel';
-import { TableModule } from 'primeng/table';
-import { InputTextModule } from 'primeng/inputtext';
 import { TabsModule } from 'primeng/tabs';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
 import { CatsService } from '../../core/services/cats.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Breed, CatImage } from '../../core/models/breed.model';
 import { APP_ROUTES } from '../../core/constants/routes.constants';
+import { HeaderComponent } from '../../shared/components/header/header.component';
+import { BreedSelectorComponent } from './breed-selector/breed-selector.component';
+import { BreedDetailComponent } from './breed-detail/breed-detail.component';
+import { BreedTableComponent } from './breed-table/breed-table.component';
 
+/**
+ * Breeds Component - Contenedor
+ * Orquesta los componentes hijos: selector, detail, y table
+ * Maneja la lógica de negocio y comunicación con servicios
+ */
 @Component({
   selector: 'app-breeds',
-  imports: [CommonModule, FormsModule, ButtonModule, SelectModule, CarouselModule, TableModule, InputTextModule, TabsModule, IconFieldModule, InputIconModule],
+  standalone: true,
+  imports: [
+    CommonModule,
+    TabsModule,
+    HeaderComponent,
+    BreedSelectorComponent,
+    BreedDetailComponent,
+    BreedTableComponent,
+  ],
   templateUrl: './breeds.component.html',
-  styleUrls: ['./breeds.component.scss']
+  styleUrls: ['./breeds.component.scss'],
 })
 export class BreedsComponent implements OnInit {
   /**
@@ -81,7 +90,7 @@ export class BreedsComponent implements OnInit {
       },
       error: () => {
         this.isLoading.set(false);
-      }
+      },
     });
   }
 
@@ -104,15 +113,15 @@ export class BreedsComponent implements OnInit {
         if (response.success) {
           this.breedImages.set(response.data);
         }
-      }
+      },
     });
   }
 
   /**
    * Search breeds by query
+   * @param query Search term
    */
-  searchBreeds(): void {
-    const query = this.searchQuery();
+  searchBreeds(query: string): void {
     if (!query.trim()) {
       this.filteredBreeds.set(this.breeds());
       return;
@@ -123,8 +132,16 @@ export class BreedsComponent implements OnInit {
         if (response.success) {
           this.filteredBreeds.set(response.data);
         }
-      }
+      },
     });
+  }
+
+  /**
+   * Update search query signal
+   * @param query New search query
+   */
+  updateSearchQuery(query: string): void {
+    this.searchQuery.set(query);
   }
 
   /**
@@ -135,6 +152,9 @@ export class BreedsComponent implements OnInit {
     this.router.navigate([APP_ROUTES.LOGIN]);
   }
 
+  /**
+   * Navigate to profile page
+   */
   goToProfile(): void {
     this.router.navigate([APP_ROUTES.PROFILE]);
   }
