@@ -1,0 +1,116 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <div class="bg-white shadow">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-3xl font-bold">Razas de Gatos</h1>
+      <div class="flex items-center gap-4">
+        <p class="text-gray-600">Bienvenido,
+        <a class="text-blue-600 hover:underline cursor-pointer" (click)="goToProfile()">
+          {{ authService.currentUser()?.firstName }}
+          </a>
+        </p>
+        <p-button label="Cerrar Sesión" icon="pi pi-sign-out" (click)="logout()" severity="secondary"></p-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <p-tabs>
+      <!-- Tab 1: Breeds Carousel -->
+      <p-tabpanel header="Detalles de Razas">
+        <div class="flex flex-col py-4 space-y-4">
+          <!-- Select -->
+          <div>
+            <label class="block text-sm font-medium mb-2">Selecciona una Raza</label>
+            <p-select
+              [options]="breeds()"
+              [ngModel]="selectedBreed()"
+              (onChange)="onBreedSelect($event.value)"
+              optionLabel="name"
+              placeholder="Seleccionar Raza"
+              class="w-full"
+            ></p-select>
+          </div>
+
+          <!-- Selected Breed Info + Carousel -->
+          @if (selectedBreed()) {
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Info -->
+              <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-2xl font-bold mb-4">{{ selectedBreed()?.name }}</h2>
+                <div class="flex flex-col space-y-2 text-sm">
+                  <p><strong>Temperamento:</strong> {{ selectedBreed()?.temperament }}</p>
+                  <p><strong>Origen:</strong> {{ selectedBreed()?.origin }}</p>
+                  <p><strong>Esperanza de Vida:</strong> {{ selectedBreed()?.life_span }}</p>
+                  <p><strong>Adaptabilidad:</strong> {{ selectedBreed()?.adaptability }}/5</p>
+                  <p><strong>Nivel de Afecto:</strong> {{ selectedBreed()?.affection_level }}/5</p>
+                  <p><strong>Inteligencia:</strong> {{ selectedBreed()?.intelligence }}/5</p>
+                </div>
+                <p class="mt-4 text-sm text-gray-600">{{ selectedBreed()?.description }}</p>
+              </div>
+
+              <!-- Carousel -->
+              @if (breedImages().length > 0) {
+                <div>
+                  <p-carousel
+                    [value]="breedImages()"
+                    [numVisible]="1"
+                    [responsiveOptions]="[]"
+                    containerClass="custom-carousel"
+                    [showIndicators]="true"
+                  >
+                    <ng-template pTemplate="item" let-image>
+                      <img
+                        [src]="image.url"
+                        [alt]="selectedBreed()?.name"
+                        class="w-full h-96 object-cover rounded"
+                      />
+                    </ng-template>
+                  </p-carousel>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </p-tabpanel>
+
+      <!-- Tab 2: Breeds Table with Search -->
+      <p-tabpanel header="Todas las Razas">
+        <div class="flex flex-col space-y-4">
+          <!-- Search -->
+          <div class="flex gap-2">
+            <input
+              pInputText
+              [ngModel]="searchQuery()"
+              (ngModelChange)="searchQuery.set($event)"
+              placeholder="Buscar razas..."
+              class="flex-1"
+            />
+            <p-button label="Buscar" icon="pi pi-search" (click)="searchBreeds()"></p-button>
+          </div>
+
+          <!-- Table -->
+          <p-table [value]="filteredBreeds()" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template #header>
+              <tr>
+                <th>Nombre</th>
+                <th>Origen</th>
+                <th>Temperamento</th>
+                <th>Inteligencia</th>
+              </tr>
+            </ng-template>
+            <ng-template #body let-breed>
+              <tr>
+                <td>{{ breed.name }}</td>
+                <td>{{ breed.origin }}</td>
+                <td>{{ breed.temperament }}</td>
+                <td>{{ breed.intelligence }}/5</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </p-tabpanel>
+    </p-tabs>
+  </div>
+</div>

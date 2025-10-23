@@ -1,0 +1,76 @@
+<div class="flex justify-center items-center min-h-screen bg-gray-100">
+  <p-card class="w-full max-w-md">
+    <ng-template pTemplate="header">
+      <h1 class="text-2xl font-bold text-center">Registrarse</h1>
+    </ng-template>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col space-y-4">
+      <div class="flex flex-col space-y-2">
+        <label for="firstName" class="block text-sm font-medium">Nombre</label>
+        <input
+          pInputText
+          id="firstName"
+          formControlName="firstName"
+          type="text"
+          class="w-full"
+          placeholder="Ingrese su nombre"
+        />
+      </div>
+
+      <div class="flex flex-col space-y-2">
+        <label for="lastName" class="block text-sm font-medium">Apellido</label>
+        <input
+          pInputText
+          id="lastName"
+          formControlName="lastName"
+          type="text"
+          class="w-full"
+          placeholder="Ingrese su apellido"
+        />
+      </div>
+
+      <div class="flex flex-col space-y-2">
+        <label for="email" class="block text-sm font-medium">Correo Electrónico</label>
+        <input
+          pInputText
+          id="email"
+          formControlName="email"
+          type="email"
+          class="w-full"
+          placeholder="Ingrese su correo electrónico"
+        />
+      </div>
+
+      <div class="flex flex-col space-y-2">
+        <label for="password" class="block text-sm font-medium">Contraseña</label>
+        <input
+          pInputText
+          id="password"
+          formControlName="password"
+          type="password"
+          class="w-full"
+          placeholder="Ingrese su contraseña"
+        />
+      </div>
+
+      @if (errorMessage()) {
+        <div class="p-3 bg-red-100 text-red-700 rounded">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <p-button
+        label="Registrarse"
+        [loading]="isLoading()"
+        [disabled]="registerForm.invalid || isLoading()"
+        type="submit"
+        class="w-full"
+      ></p-button>
+
+      <p class="text-center">
+        ¿Ya tienes cuenta?
+        <a (click)="goToLogin()" class="text-blue-600 hover:underline cursor-pointer">Iniciar Sesión</a>
+      </p>
+    </form>
+  </p-card>
+</div>
