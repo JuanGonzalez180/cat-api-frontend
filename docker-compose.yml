@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: xpert-group
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    networks:
+      - xpert-network
+
+networks:
+  xpert-network:
+    driver: bridge
