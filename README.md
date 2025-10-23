@@ -110,17 +110,26 @@ src/
 │   ├── core/
 │   │   ├── services/          # AuthService, CatsService
 │   │   ├── interceptors/      # auth.interceptor
-│   │   ├── models/            # Tipos/Interfaces
+│   │   ├── models/            # Interfaces (User, Breed, CatImage)
 │   │   ├── constants/         # Rutas, API endpoints
 │   │   └── guards/            # Route guards
 │   ├── features/
-│   │   ├── auth/              # Login, Register, Profile
-│   │   └── breeds/            # Visualización de razas
-│   ├── shared/                # Componentes compartidos
+│   │   ├── auth/
+│   │   │   ├── login/         # LoginComponent
+│   │   │   ├── register/      # RegisterComponent
+│   │   │   └── profile/       # ProfileComponent
+│   │   └── breeds/
+│   │       ├── breed-selector/    # BreedSelectorComponent
+│   │       ├── breed-detail/      # BreedDetailComponent
+│   │       ├── breed-table/       # BreedTableComponent
+│   │       └── breeds.component.ts    # Contenedor
+│   ├── shared/
+│   │   └── components/
+│   │       └── header/        # HeaderComponent (reutilizable)
 │   └── app.config.ts          # Configuración Angular
 ├── environments/              # Configuración por entorno
-├── styles.scss               # Estilos globales
-└── main.ts                   # Entry point
+├── styles.scss                # Estilos globales
+└── main.ts                    # Entry point
 ```
 
 ## Autenticación
