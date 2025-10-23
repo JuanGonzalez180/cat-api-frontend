@@ -52,11 +52,9 @@ describe('ProfileComponent', () => {
     const currentUser = component.authService.currentUser();
 
     expect(currentUser).toBeDefined();
-    if (currentUser) {
-      expect(currentUser.email).toBe('test@example.com');
-      expect(currentUser.firstName).toBe('Test');
-      expect(currentUser.lastName).toBe('User');
-    }
+    expect(currentUser?.email).toBe('test@example.com');
+    expect(currentUser?.firstName).toBe('Test');
+    expect(currentUser?.lastName).toBe('User');
   });
 
   it('should logout user and navigate to login page on logout()', () => {
