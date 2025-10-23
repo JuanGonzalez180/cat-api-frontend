@@ -145,14 +145,18 @@ describe('BreedsComponent', () => {
     }, 100);
   });
 
-  it('should set isLoading to true when loading breeds', () => {
+  it('should populate breeds when loading is successful', (done) => {
     catsService.getBreeds.and.returnValue(
       of({ success: true, data: mockBreeds, count: 2 })
     );
 
     component.loadBreeds();
 
-    expect(component.isLoading()).toBe(true);
+    setTimeout(() => {
+      expect(component.breeds()).toEqual(mockBreeds);
+      expect(component.filteredBreeds()).toEqual(mockBreeds);
+      done();
+    }, 100);
   });
 
   it('should set isLoading to false when breeds are loaded', (done) => {

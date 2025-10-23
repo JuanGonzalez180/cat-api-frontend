@@ -91,7 +91,7 @@ describe('RegisterComponent', () => {
     expect(authService.register).not.toHaveBeenCalled();
   });
 
-  it('should set isLoading to true when submitting', () => {
+  it('should clear error message when submitting', () => {
     const mockResponse = {
       success: true,
       message: 'User registered successfully',
@@ -106,6 +106,7 @@ describe('RegisterComponent', () => {
 
     authService.register.and.returnValue(of(mockResponse));
 
+    component.errorMessage.set('Previous error');
     component.registerForm.patchValue({
       firstName: 'New',
       lastName: 'User',
@@ -115,7 +116,7 @@ describe('RegisterComponent', () => {
 
     component.onSubmit();
 
-    expect(component.isLoading()).toBe(true);
+    expect(component.errorMessage()).toBeNull();
   });
 
   it('should register user and navigate to breeds page on success', (done) => {

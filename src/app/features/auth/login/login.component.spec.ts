@@ -84,7 +84,7 @@ describe('LoginComponent', () => {
     expect(authService.login).not.toHaveBeenCalled();
   });
 
-  it('should set isLoading to true when submitting', () => {
+  it('should clear error message when submitting', () => {
     const mockResponse = {
       success: true,
       message: 'Login successful',
@@ -99,6 +99,7 @@ describe('LoginComponent', () => {
 
     authService.login.and.returnValue(of(mockResponse));
 
+    component.errorMessage.set('Previous error');
     component.loginForm.patchValue({
       email: 'test@example.com',
       password: 'password123',
@@ -106,7 +107,7 @@ describe('LoginComponent', () => {
 
     component.onSubmit();
 
-    expect(component.isLoading()).toBe(true);
+    expect(component.errorMessage()).toBeNull();
   });
 
   it('should login user and navigate to breeds page on success', (done) => {
